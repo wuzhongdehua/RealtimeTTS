@@ -46,7 +46,7 @@ async def handle(text):
     running = threading.Event()
     try:
         start_generation(text, running)
-        while not running.is_set() and not engine.queue.empty():
+        while not running.is_set() or not engine.queue.empty():
             try:
                 val = engine.queue.get(timeout=0.1)
                 yield val
