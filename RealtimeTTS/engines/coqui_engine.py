@@ -252,6 +252,7 @@ class CoquiEngine(BaseEngine):
         logging.info('Coqui synthesis model ready')
 
     def post_init(self):
+        self.can_consume_generators = True
         self.engine_name = "coqui"
 
     @staticmethod
@@ -715,13 +716,13 @@ class CoquiEngine(BaseEngine):
 
         return text
 
-    def synthesize(self,
-                   text: str) -> bool:
+    def synthesize(self, text: str, running: bool = True) -> bool:
         """
         Synthesizes text to audio stream.
 
         Args:
             text (str): Text to synthesize.
+            :param running:
         """
 
         with self._synthesize_lock:
@@ -744,6 +745,8 @@ class CoquiEngine(BaseEngine):
                     return False
                 self.queue.put(result)
                 status, result = self.parent_synthesize_pipe.recv()
+
+            running = False
 
             return True
 
