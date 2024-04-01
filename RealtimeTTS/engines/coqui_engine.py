@@ -1,3 +1,5 @@
+import threading
+
 from .base_engine import BaseEngine
 import torch.multiprocessing as mp
 from threading import Lock, Thread
@@ -716,7 +718,7 @@ class CoquiEngine(BaseEngine):
 
         return text
 
-    def synthesize(self, text: str, running: bool = True) -> bool:
+    def synthesize(self, text: str, running=threading.Event()) -> bool:
         """
         Synthesizes text to audio stream.
 
@@ -746,7 +748,7 @@ class CoquiEngine(BaseEngine):
                 self.queue.put(result)
                 status, result = self.parent_synthesize_pipe.recv()
 
-            running = False
+            running.set()
 
             return True
 

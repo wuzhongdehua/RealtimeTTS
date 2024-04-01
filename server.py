@@ -1,6 +1,7 @@
 import argparse
 import os
 import queue
+import threading
 import time
 from threading import Thread
 
@@ -36,16 +37,16 @@ app = FastAPI()
 engine = get_engine("system")
 
 
-def start_generation(text, running=True):
+def start_generation(text, running):
     thread = Thread(target=engine.synthesize, args=(text, running), daemon=True)
     thread.start()
 
 
 async def handle(text):
-    running = True
+    running = threading.Event()
     try:
         start_generation(text, running)
-        while running or not engine.queue.empty():
+        while not running.is_set() and not engine.queue.empty():
             try:
                 val = engine.queue.get(timeout=0.1)
                 yield val
