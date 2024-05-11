@@ -6,6 +6,8 @@
 
 RealtimeTTS is a state-of-the-art text-to-speech (TTS) library designed for real-time applications. It stands out in its ability to convert text streams fast into high-quality auditory output with minimal latency. 
 
+> **Hint:** *<strong>Check out [Linguflex](https://github.com/KoljaB/Linguflex)</strong>, the original project from which RealtimeTTS is spun off. It lets you control your environment by speaking and is one of the most capable and sophisticated open-source assistants currently available.*
+
 https://github.com/KoljaB/RealtimeTTS/assets/7604638/87dcd9a5-3a4e-4f57-be45-837fc63237e7
 
 ## Key Features
@@ -24,9 +26,13 @@ https://github.com/KoljaB/RealtimeTTS/assets/7604638/87dcd9a5-3a4e-4f57-be45-837
 
 > **Hint**: *check out [RealtimeSTT](https://github.com/KoljaB/RealtimeSTT), the input counterpart of this library, for speech-to-text capabilities. Together, they form a powerful realtime audio wrapper around large language models.*
 
+## FAQ
+
+Check the [FAQ page](./FAQ.md) for answers to a lot of questions around the usage of RealtimeTTS.
+
 ## Updates
 
-Latest Version: v0.3.43
+Latest Version: v0.3.46
 
 See [release history](https://github.com/KoljaB/RealtimeTTS/releases).
 
@@ -37,7 +43,7 @@ This library uses:
 - **Text-to-Speech Engines**
   - **OpenAIEngine**: OpenAI's TTS system offers 6 natural sounding voices.
   - **CoquiEngine**: High quality local neural TTS.
-  - **AzureEngine**: Microsoft's leading TTS technology. 250000 chars free per month.
+  - **AzureEngine**: Microsoft's leading TTS technology. 500000 chars free per month.
   - **ElevenlabsEngine**: Offer the best sounding voices available.
   - **SystemEngine**: Native engine for quick setup.
 
@@ -107,7 +113,7 @@ Delivers high quality, local, neural TTS with voice-cloning.
 Downloads a neural TTS model first. In most cases it be fast enought for Realtime using GPU synthesis. Needs around 4-5 GB VRAM.
 
 - to clone a voice submit the filename of a wave file containing the source voice as "voice" parameter to the CoquiEngine constructor
-- in my experience voice cloning works best with a 22050 Hz mono 16bit WAV file containing a short (~10-30 sec) sample 
+- voice cloning works best with a 22050 Hz mono 16bit WAV file containing a short (~5-30 sec) sample 
 
 On most systems GPU support will be needed to run fast enough for realtime, otherwise you will experience stuttering.
 
@@ -283,6 +289,30 @@ When you initialize the `TextToAudioStream` class, you have various options to c
 - **Type**: Callable function
 - **Required**: No
 - **Description**: This optional callback function is called when a single character is processed.
+
+#### `output_device_index` (int)
+- **Type**: Integer
+- **Required**: No
+- **Default**: None
+- **Description**: Specifies the output device index to use. None uses the default device.
+
+#### `tokenizer` (string)
+- **Type**: String
+- **Required**: No
+- **Default**: nltk
+- **Description**: Tokenizer to use for sentence splitting (currently "nltk" and "stanza" are supported).
+
+#### `language` (string)
+- **Type**: String
+- **Required**: No
+- **Default**: en
+- **Description**: Language to use for sentence splitting.
+
+#### `muted` (bool)
+- **Type**: Bool
+- **Required**: No
+- **Default**: False
+- **Description**: Global muted parameter. If True, no pyAudio stream will be opened. Disables audio playback via local speakers (in case you want to synthesize to file or process audio chunks) and overrides the play parameters muted setting.
 
 #### `level` (int)
 - **Type**: Integer
